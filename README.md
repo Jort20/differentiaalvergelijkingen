@@ -12,11 +12,12 @@ Dit project implementeert en vergelijkt verschillende wiskundige modellen voor t
 4. [Functies en Functionaliteit](#functies-en-functionaliteit)
 5. [Installatie](#installatie)
 6. [Gebruik](#gebruik)
-7. [Problemen](#problemen)
-8. [Authors and Acknowledgments](#Author_and_Acknowledgments)
-9. [License](#license)
-10. [Changelog](#changelog)
-11. [Referenties](#referenties)
+7. [Resultaten](#resultaten)
+8. [Problemen](#problemen)
+9. [Authors and Acknowledgments](#Author_and_Acknowledgments)
+10. [License](#license)
+11. [Changelog](#changelog)
+12. [Referenties](#referenties)
 
 ---
 
@@ -184,7 +185,7 @@ t_vooruit = np.linspace(0, 150, 150)  # Van 0 tot 150 dagen met 150 punten
 # Voer model evaluatie uit en visualiseer de resultaten
 model.evaluate_models(t_vooruit)
 ```
-```
+
 ## Resultaten
 
 Na het uitvoeren van de bovenstaande code:
