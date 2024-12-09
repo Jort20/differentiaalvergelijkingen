@@ -35,48 +35,39 @@ Hieronder worden de modellen en hun parameters in detail beschreven:
 ### Gompertz-model
 
 De differentiaalvergelijking voor het Gompertz-model is:
-\[
-\frac{dV}{dt} = c \cdot V \cdot \ln\left(\frac{V_{\text{max}}}{V}\right)
-\]
+dV/dt = c * V * ln(V_max / V)
+
 
 **Parameters**:
-- \( V \): Het tumorvolume op een bepaald tijdstip \( t \) (mm³).
-- \( c \): De groeisnelheidsparameter (\( \text{dag}^{-1} \)). Een hogere waarde geeft een snellere initiële groei aan.
-- \( V_{\text{max}} \): Het maximale tumorvolume (mm³), dat de asymptotische limiet voor de groei vertegenwoordigt.
-- \( t \): Tijd (dagen).
+- `V`: Het tumorvolume op een bepaald tijdstip `t` (mm³).
+- `c`: De groeisnelheidsparameter (dag⁻¹). Een hogere waarde geeft een snellere initiële groei aan.
+- `V_max`: Het maximale tumorvolume (mm³), dat de asymptotische limiet voor de groei vertegenwoordigt.
+- `t`: Tijd (dagen).
 
 ### Logistisch model
 
 De logistische groeivergelijking is:
-\[
-\frac{dV}{dt} = c \cdot V \cdot \left(1 - \frac{V}{V_{\text{max}}}\right)
-\]
+dV/dt = c * V * (1 - V / V_max)
 
 **Parameters**:
-- \( V \): Het tumorvolume (mm³).
-- \( c \): De groeisnelheid (\( \text{dag}^{-1} \)). Deze parameter bepaalt hoe snel de tumor zijn maximale capaciteit nadert.
-- \( V_{\text{max}} \): Het maximumvolume dat de tumor kan bereiken vanwege fysieke of biologische beperkingen.
-- \( t \): Tijd (dagen).
+- `V`: Het tumorvolume (mm³).
+- `c`: De groeisnelheid (dag⁻¹). Deze parameter bepaalt hoe snel de tumor zijn maximale capaciteit nadert.
+- `V_max`: Het maximumvolume dat de tumor kan bereiken vanwege fysieke of biologische beperkingen.
+- `t`: Tijd (dagen).
 
-**Gedrag**:
-- Bij \( V \ll V_{\text{max}} \): Groeit de tumor bijna exponentieel.
-- Bij \( V \to V_{\text{max}} \): Neemt de groeisnelheid af tot nul.
 
 ### Von Bertalanffy-model
 
 Het Von Bertalanffy-model beschrijft de balans tussen groei en afbraak:
-\[
-\frac{dV}{dt} = c \cdot V^{\frac{2}{3}} - d \cdot V
-\]
+dV/dt = c * V^(2/3) - d * V
 
 **Parameters**:
-- \( V \): Het tumorvolume (mm³).
-- \( c \): De groeifactor (\( \text{dag}^{-1} \)). Een hogere waarde wijst op een snellere initiële groei.
-- \( d \): De afbraaksnelheid (\( \text{dag}^{-1} \)). Dit beschrijft hoe snel de tumor krimpt door interne processen.
-- \( t \): Tijd (dagen).
+- `V`: Het tumorvolume (mm³).
+- `c`: De groeifactor (dag⁻¹). Een hogere waarde wijst op een snellere initiële groei.
+- `d`: De afbraaksnelheid (dag⁻¹). Dit beschrijft hoe snel de tumor krimpt door interne processen.
+- `t`: Tijd (dagen).
 
-**Gedrag**:
-- Het model is geschikt voor systemen waar de groei wordt bepaald door het oppervlak (\( V^{2/3} \)) en de afbraak proportioneel is aan het volume.
+
 
 ---
 
@@ -86,20 +77,19 @@ Aangezien de modellen gebaseerd zijn op niet-lineaire differentiaalvergelijkinge
 
 ### Heun-methode
 Een verbeterde versie van de Euler-methode, die een correctiefactor toevoegt om nauwkeuriger te zijn:
-\[
-V_{n+1} = V_n + \Delta t \cdot \frac{f(t_n, V_n) + f(t_{n+1}, V_e)}{2}
-\]
+
+V_new = V + Δt * (f(t, V) + f(t + Δt, V_euler)) / 2
+
 Hierbij wordt \( f(t, V) \) gegeven door het groeimodel.
 
 ### Runge-Kutta-methode (vierde orde)
 Een populaire methode voor numerieke integratie:
-\[
-V_{n+1} = V_n + \frac{1}{6}(k_1 + 2k_2 + 2k_3 + k_4)
-\]
+
+V_new = V + (k1 + 2k2 + 2k3 + k4) / 6
 waarbij:
-\[
-k_1 = f(t_n, V_n), \quad k_2 = f(t_n + \frac{\Delta t}{2}, V_n + \frac{\Delta t}{2} k_1)
-\]
+
+k1 = Δt * f(t, V) k2 = Δt * f(t + Δt/2, V + k1/2) k3 = Δt * f(t + Δt/2, V + k2/2) k4 = Δt * f(t + Δt, V + k3)
+
 Enzovoorts, met hogere orde correcties.
 
 ---
