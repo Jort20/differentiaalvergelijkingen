@@ -190,8 +190,8 @@ model.evaluate_models(t_vooruit)
 
 Na het uitvoeren van de bovenstaande code:
 
-    Visualisatie: Er worden grafieken getoond van de tumorgroei volgens de drie modellen (Gompertz, Logistic, Von Bertalanffy) in vergelijking met de werkelijke gegevens.
-    Model Evaluatie: De AIC- en BIC-waarden worden berekend voor elk model en weergegeven in de console. Deze waarden helpen je bij het kiezen van het beste model.
+Visualisatie: Er worden grafieken getoond van de tumorgroei volgens de drie modellen (Gompertz, Logistic, Von Bertalanffy) in vergelijking met de werkelijke gegevens.
+Model Evaluatie: De AIC- en BIC-waarden worden berekend voor elk model en weergegeven in de console. Deze waarden helpen je bij het kiezen van het beste model.
    
 
 ## Problemen
