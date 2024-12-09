@@ -158,7 +158,7 @@ Voor meer duidelijkheid kijk de jupyter notebook en de onderdelen die je niet be
 1. *Gompertz function*. [Link](https://en.wikipedia.org/wiki/Gompertz_function)
 2. *Logistic regression*. [Link](https://en.wikipedia.org/wiki/Logistic_regression)
 3. Derek H. Ogle (2006). *Growth (von Bertalanffy) Notes*. [Link](https://derekogle.com/NCNRS349/modules/PREP/NOTES/Growth)
-4. *Runge-Kutta Method*[link](https://www.sciencedirect.com/topics/mathematics/runge-kutta-method)
-5. *Heun's method*[link](https://en.wikipedia.org/wiki/Heun%27s_method)
+4. *Runge-Kutta Method*. [link](https://www.sciencedirect.com/topics/mathematics/runge-kutta-method)
+5. *Heun's method*. [link](https://en.wikipedia.org/wiki/Heun%27s_method)
 
 
