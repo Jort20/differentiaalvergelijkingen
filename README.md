@@ -121,49 +121,77 @@ Enzovoorts, met hogere orde correcties.
 
 ## Gebruik
 
-Je hebt een dataset nodig van een tumor, met daarin de groeigegevens (`v_data`) en de tijd (`t_data`). Daarna kun je de code uitvoeren met die data, samen met de al gegeven modellen. Als je zelf een model wilt toevoegen, volg dan de onderstaande stappen:
+### Stap 1: Importeer de Module
 
-1. Maak een nieuwe functie voor jouw model:
+De module moet geïmporteerd worden vanuit de Python-bestand waarin de class is opgeslagen (test.py in dit geval).
 
-    ```python
-    def your_model(values_it_needs):
-        return your_methods_formula
-    ```
+```python
+from test import TumorGrowthModels
+```
 
-2. Maak een wrapper voor je model die wordt gebruikt voor de `curve_fit` functie. Gebruik hiervoor de volgende structuur:
+### Stap 2: Genereer of definieer je eigen Data
 
-    ```python
-    def your_model_wrapper(values_it_needs):
-        V0 = 250  # Startwaarde van het volume
-        dt = t[1] - t[0]  # Bereken het tijdsverschil
-        V = [V0]
-        for i in range(1, len(t)):
-            V_new = V[-1] + dt * your_model(values_it_needs)
-            V.append(V_new)
-        return np.array(V)
-    ```
+Je kunt de nepdatasets die door de module worden gegenereerd gebruiken, of je kunt je eigen tijd- en volumegegevens instellen.
+```python
+# Voorbeeld van nepdataset genereren
+t_data, V_data = TumorGrowthModels.generate_fake_data()
 
-3. Pas vervolgens de Runge-Kutta methode toe voor jouw model:
+# Of je kunt je eigen data instellen
+t_data = np.array([0, 10, 20, 30, 40, 50, 60, 70, 80, 90, 100])
+V_data = np.array([250, 300, 450, 600, 750, 1000, 1300, 1700, 2200, 2700, 3200])
+```
 
-    ```python
-    def your_method_runga(values_it_needs):
-        return Runge_method(your_model, values_it_needs)
-    ```
+### Stap 3: Maak een Model aan
 
-4. Voer je model uit en plot de resultaten:
+Maak een object van de TumorGrowthModels class, geef de tijd- en volumegegevens door aan de constructor.
 
-    ```python
-    initial_params_your_model = [0.1, 0.01]  # Beginparameters voor jouw model
-    tijd = np.linspace(0, 120, 100)  # Pas de tijdswaarden aan zoals nodig
+```python
+model = TumorGrowthModels(t_data, V_data)
+```
+### Stap 4: Stel de Tijdspanne in voor Simulatie (Optioneel)
 
-    param_your_model = fit_model(your_model_wrapper, t_data, v_data, p0=initial_params_your_model)
-    V_sim_your_model = your_method_runga(tijd, 250, *param_your_model, dt)
+Je kunt de tijdspanne voor de simulatie aanpassen via de t_vooruit parameter. Als deze parameter niet wordt opgegeven, wordt de standaardwaarde van np.linspace(0, 120, 100) gebruikt, wat betekent dat de simulatie loopt van 0 tot 120 dagen met 100 punten.
 
-    # Voeg de volgende regel toe aan de plot om je model te visualiseren
-    plt.plot(tijd, V_sim_your_model, label=f"Your model\n(c={param_your_model[0]:.3f}, V_max={param_your_model[1]:.1f})", color="green")
-    ```
+```python
 
-Voor meer duidelijkheid kun je de Jupyter notebook raadplegen en de onderdelen die je niet begrijpt nader bekijken.
+# Stel een eigen tijdspanne in
+t_vooruit = np.linspace(0, 150, 150)  # Van 0 tot 150 dagen met 150 punten
+```
+### Stap 5: Voer Model Evaluatie en Visualisatie uit
+
+Roep de evaluate_models methode aan om de modellen te fitten, de simulaties uit te voeren, de resultaten te visualiseren en de AIC/BIC-waarden te berekenen.
+
+```python
+# Voer model evaluatie uit en visualiseer de resultaten
+model.evaluate_models(t_vooruit)
+```
+### Volledige Voorbeeld
+
+from test import TumorGrowthModels
+import numpy as np
+
+```python
+# Genereer of stel je eigen tijd- en volumegegevens in
+t_data = np.array([0, 10, 20, 30, 40, 50, 60, 70, 80, 90, 100])
+V_data = np.array([250, 300, 450, 600, 750, 1000, 1300, 1700, 2200, 2700, 3200])
+
+# Maak een model aan met je eigen data
+model = TumorGrowthModels(t_data, V_data)
+
+# Stel een eigen tijdspanne in voor de simulatie
+t_vooruit = np.linspace(0, 150, 150)  # Van 0 tot 150 dagen met 150 punten
+
+# Voer model evaluatie uit en visualiseer de resultaten
+model.evaluate_models(t_vooruit)
+```
+```
+## Resultaten
+
+Na het uitvoeren van de bovenstaande code:
+
+    Visualisatie: Er worden grafieken getoond van de tumorgroei volgens de drie modellen (Gompertz, Logistic, Von Bertalanffy) in vergelijking met de werkelijke gegevens.
+    Model Evaluatie: De AIC- en BIC-waarden worden berekend voor elk model en weergegeven in de console. Deze waarden helpen je bij het kiezen van het beste model.
+   
 
 ## Problemen
 
