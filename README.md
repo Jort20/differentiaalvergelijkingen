@@ -12,7 +12,6 @@ Dit project implementeert en vergelijkt verschillende wiskundige modellen voor t
 4. [Functies en Functionaliteit](#functies-en-functionaliteit)
 5. [Installatie](#installatie)
 6. [Gebruik](#gebruik)
-7. [Resultaten en Visualisatie](#resultaten-en-visualisatie)
 8. [Referenties](#referenties)
 
 ---
@@ -114,4 +113,52 @@ Enzovoorts, met hogere orde correcties.
    ```bash
    pip install numpy scipy matplotlib
    ```
+---
+
+## Gebruik 
+je hebt een dataset nodig van een tumor met daarin de groei v_data en de tijd t_data Daarna kun je de file runnen met die data met de al gegeven models.
+als je zelf een model wilt toevoegen moet dit gebeuren
+maak een nieuwe functie:
+```bash
+def your_model(values it needs):
+    return your methods formula
+```
+vervolgens moet je voor jouw model een wrapper maken voor de curve fit gebruik dit:
+
+```bash
+def your_model_wrapper(values it needs):
+    V0 = 250  
+    dt = t[1] - t[0]  
+    V = [V0]
+    for i in range(1, len(t)):
+        V_new = V[-1] + dt * your_model(values it needs)
+        V.append(V_new)
+    return np.array(V)
+```
+vervolgens pas de runga of hean method voor jouw module toe
+
+```bash
+def ypur_method_runga(values it needs):
+    return Runga_method(your_model, values it needs)
+```
+als laatste run en plot je jouw models
+```bash
+initial_params_your_module = [0.1, 0.01]
+ tijd = np.linspace(0, 120, 100)# waardes kun je meespleen hier
+
+param_your_module = fit_model(your_module_wrapper, t_data, V_data, p0=initial_params_your_module)
+V_sim_your_module = your_module_runga(tijd, 250, *params_von_bertalanffy, dt)
+
+# voeg deze line toe aan de plot lines
+plt.plot(tijd, V_sim_your_module, label=f"your module\n(c={params_Your_module[0]:.3f}, V_max={params_your_module[1]:.1f})", color="green")
+```
+Voor meer duidelijkheid kijk de jupyter notebook en de onderdelen die je niet begrijpt
+
+### Referenties
+1. *Gompertz function*. [Link](https://en.wikipedia.org/wiki/Gompertz_function)
+2. *Logistic regression*. [Link](https://en.wikipedia.org/wiki/Logistic_regression)
+3. Derek H. Ogle (2006). *Growth (von Bertalanffy) Notes*. [Link](https://derekogle.com/NCNRS349/modules/PREP/NOTES/Growth)
+4. *Runge-Kutta Method*[link](https://www.sciencedirect.com/topics/mathematics/runge-kutta-method)
+5. *Heun's method*[link](https://en.wikipedia.org/wiki/Heun%27s_method)
+
 
