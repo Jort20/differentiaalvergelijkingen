@@ -23,7 +23,7 @@ De groei van tumoren is een complex proces dat vaak wordt gemodelleerd met behul
 De drie modellen in dit project hebben elk unieke eigenschappen die ze geschikt maken voor verschillende toepassingen:
 - **Gompertz-model**: Wordt vaak gebruikt in tumorbiologie vanwege zijn flexibiliteit en realistische groei-limieten.
 - **Logistisch model**: Eenvoudig en effectief, vaak gebruikt voor populatiedynamica of groei met beperkende factoren.
-- **Von Bertalanffy-model**: Beschrijft zowel groei als afbraak, nuttig voor biologie en fysiologie.
+- **Von Bertalanffy-model**: Beschrijft zowel groei als afbraak, word gebruikt in biologie en fysiologie.
 
 ---
 
