@@ -86,6 +86,7 @@ Hierbij wordt \( f(t, V) \) gegeven door het groeimodel.
 Een populaire methode voor numerieke integratie:
 
 V_new = V + (k1 + 2k2 + 2k3 + k4) / 6
+
 waarbij:
 
 k1 = Δt * f(t, V) k2 = Δt * f(t + Δt/2, V + k1/2) k3 = Δt * f(t + Δt/2, V + k2/2) k4 = Δt * f(t + Δt, V + k3)
