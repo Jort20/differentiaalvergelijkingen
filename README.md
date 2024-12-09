@@ -12,7 +12,11 @@ Dit project implementeert en vergelijkt verschillende wiskundige modellen voor t
 4. [Functies en Functionaliteit](#functies-en-functionaliteit)
 5. [Installatie](#installatie)
 6. [Gebruik](#gebruik)
-8. [Referenties](#referenties)
+7. [Problemen](#problemen)
+8. [Authors and Acknowledgments](#Author_and_Acknowledgments)
+9. [License](#license)
+10. [Changelog](#changelog)
+11. [Referenties](#referenties)
 
 ---
 
@@ -160,6 +164,23 @@ Je hebt een dataset nodig van een tumor, met daarin de groeigegevens (`v_data`) 
     ```
 
 Voor meer duidelijkheid kun je de Jupyter notebook raadplegen en de onderdelen die je niet begrijpt nader bekijken.
+
+## Problemen
+
+Bij problemen in de module kun je een mail sturen (zie de **Authors** sectie).
+
+
+## Authors and Acknowledgments
+
+Developed by:
+- Jort Gommers: [j.r.gommers@st.hanze.nl](mailto:j.r.gommers@st.hanze.nl)
+
+## License
+No specific licensing applies 
+
+## Changelog
+
+- **v1.0**: Initial release with basic functionality.
 
 
 ### Referenties
