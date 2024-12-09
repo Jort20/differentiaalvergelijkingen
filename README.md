@@ -115,44 +115,52 @@ Enzovoorts, met hogere orde correcties.
    ```
 ---
 
-## Gebruik 
-je hebt een dataset nodig van een tumor met daarin de groei v_data en de tijd t_data Daarna kun je de file runnen met die data met de al gegeven models.
-als je zelf een model wilt toevoegen moet dit gebeuren
-maak een nieuwe functie:
-```bash
-def your_model(values it needs):
-    return your methods formula
-```
-vervolgens moet je voor jouw model een wrapper maken voor de curve fit gebruik dit:
+## Gebruik
 
-```bash
-def your_model_wrapper(values it needs):
-    V0 = 250  
-    dt = t[1] - t[0]  
-    V = [V0]
-    for i in range(1, len(t)):
-        V_new = V[-1] + dt * your_model(values it needs)
-        V.append(V_new)
-    return np.array(V)
-```
-vervolgens pas de runga of hean method voor jouw module toe
+Je hebt een dataset nodig van een tumor, met daarin de groeigegevens (`v_data`) en de tijd (`t_data`). Daarna kun je de code uitvoeren met die data, samen met de al gegeven modellen. Als je zelf een model wilt toevoegen, volg dan de onderstaande stappen:
 
-```bash
-def ypur_method_runga(values it needs):
-    return Runga_method(your_model, values it needs)
-```
-als laatste run en plot je jouw models
-```bash
-initial_params_your_module = [0.1, 0.01]
- tijd = np.linspace(0, 120, 100)# waardes kun je meespleen hier
+1. Maak een nieuwe functie voor jouw model:
 
-param_your_module = fit_model(your_module_wrapper, t_data, V_data, p0=initial_params_your_module)
-V_sim_your_module = your_module_runga(tijd, 250, *params_von_bertalanffy, dt)
+    ```python
+    def your_model(values_it_needs):
+        return your_methods_formula
+    ```
 
-# voeg deze line toe aan de plot lines
-plt.plot(tijd, V_sim_your_module, label=f"your module\n(c={params_Your_module[0]:.3f}, V_max={params_your_module[1]:.1f})", color="green")
-```
-Voor meer duidelijkheid kijk de jupyter notebook en de onderdelen die je niet begrijpt
+2. Maak een wrapper voor je model die wordt gebruikt voor de `curve_fit` functie. Gebruik hiervoor de volgende structuur:
+
+    ```python
+    def your_model_wrapper(values_it_needs):
+        V0 = 250  # Startwaarde van het volume
+        dt = t[1] - t[0]  # Bereken het tijdsverschil
+        V = [V0]
+        for i in range(1, len(t)):
+            V_new = V[-1] + dt * your_model(values_it_needs)
+            V.append(V_new)
+        return np.array(V)
+    ```
+
+3. Pas vervolgens de Runge-Kutta methode toe voor jouw model:
+
+    ```python
+    def your_method_runga(values_it_needs):
+        return Runge_method(your_model, values_it_needs)
+    ```
+
+4. Voer je model uit en plot de resultaten:
+
+    ```python
+    initial_params_your_model = [0.1, 0.01]  # Beginparameters voor jouw model
+    tijd = np.linspace(0, 120, 100)  # Pas de tijdswaarden aan zoals nodig
+
+    param_your_model = fit_model(your_model_wrapper, t_data, v_data, p0=initial_params_your_model)
+    V_sim_your_model = your_method_runga(tijd, 250, *param_your_model, dt)
+
+    # Voeg de volgende regel toe aan de plot om je model te visualiseren
+    plt.plot(tijd, V_sim_your_model, label=f"Your model\n(c={param_your_model[0]:.3f}, V_max={param_your_model[1]:.1f})", color="green")
+    ```
+
+Voor meer duidelijkheid kun je de Jupyter notebook raadplegen en de onderdelen die je niet begrijpt nader bekijken.
+
 
 ### Referenties
 1. *Gompertz function*. [Link](https://en.wikipedia.org/wiki/Gompertz_function)
