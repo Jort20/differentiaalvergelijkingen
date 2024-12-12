@@ -35,8 +35,12 @@ class TumorGrowthModels:
     @staticmethod
     def montroll_growth(t, V, c, V_max, d):
         return c * V * (V_max**d - V**d)
+
+    @ staticmethod
     def allee_growth(t, V, c, V_min, V_max):
         # Allee effect: growth rate depends on V and the boundaries V_min and V_max
+        if V <= V_min or V >= V_max:
+            return 0
         return c * (V - V_min) * (V_max - V)
 
 
@@ -215,15 +219,13 @@ class TumorGrowthModels:
         initial_params = [0.01, 8]
         initial_params_von_bertalanffy = [0.1, 0.01]
 
-        
-
         # Pas modellen aan
-        params_mendelsohn = self.fit_model_brute_force(self.mendelsohn_wrapper, self.t_data, self.V_data, p0=[0.01, 0.1])
-        params_gompertz = self.fit_model_brute_force(self.gompertz_wrapper, self.t_data, self.V_data, p0=initial_params)
-        params_logistic = self.fit_model_brute_force(self.logistic_wrapper, self.t_data, self.V_data, p0=initial_params)
-        params_von_bertalanffy = self.fit_model_brute_force(self.von_bertalanffy_wrapper, self.t_data, self.V_data, p0=initial_params_von_bertalanffy)
-        params_montroll = self.fit_model_brute_force(self.montroll_wrapper, self.t_data, self.V_data, p0=[0.01, 8, 0.1])
-        params_allee = self.fit_model_brute_force(self.allee_wrapper, self.t_data, self.V_data, p0=[0.01, 0, 0.8])
+        params_mendelsohn = self.fit_model_brute_force(self.mendelsohn_wrapper, self.t_data, self.V_data, p0=[0.01, 0.1], num_iterations=10000)
+        params_gompertz = self.fit_model_brute_force(self.gompertz_wrapper, self.t_data, self.V_data, p0=initial_params, num_iterations=10000)
+        params_logistic = self.fit_model_brute_force(self.logistic_wrapper, self.t_data, self.V_data, p0=initial_params, num_iterations=10000)
+        params_von_bertalanffy = self.fit_model_brute_force(self.von_bertalanffy_wrapper, self.t_data, self.V_data, p0=initial_params_von_bertalanffy, num_iterations=10000)
+        params_montroll = self.fit_model_brute_force(self.montroll_wrapper, self.t_data, self.V_data, p0=[0.01, 8, 0.1], num_iterations=10000)
+        params_allee = self.fit_model_brute_force(self.allee_wrapper, self.t_data, self.V_data, p0=[0.01, 0, 0.8], num_iterations=10000)
         # Simuleer data
         dt = t_vooruit[1] - t_vooruit[0]
         V_sim_gompertz = self.gompertz_Runga(t_vooruit, self.V_data[0], *params_gompertz, dt)
