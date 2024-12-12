@@ -196,7 +196,7 @@ def runge_kutta_4(f, V, t, dt):
 
 - **`generate_fake_data`**: Genereert gesimuleerde data voor tumorvolumes en tijd.
 - **`fit_model`**: Past een model aan op de data om de optimale parameters te vinden.
-- **`logistic_wrapper`, `gompertz_wrapper`, `von_bertalanffy_wrapper`**: Wrapper-functies voor compatibiliteit met `curve_fit`.
+- **`wrappers`: Wrapper-functies voor compatibiliteit met `de beste param methode`.
 - **Visualisatie**: Grafieken van modelvergelijkingen en data met Matplotlib.
 
 ---
