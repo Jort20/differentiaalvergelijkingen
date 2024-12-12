@@ -211,10 +211,9 @@ class TumorGrowthModels:
         return rss
 
     # Model evaluatie, selectie en visualisatie
-    def evaluate_models(self, t_vooruit=None):
+    def evaluate_models(self):
         # Als t_vooruit niet wordt meegegeven, gebruik de standaardwaarde
-        if t_vooruit is None:
-            t_vooruit = np.linspace(0, 120, 100)  # Standaardtijdspanne van 0 tot 120 dagen met 100 punten
+
 
         initial_params = [0.01, 8]
         initial_params_von_bertalanffy = [0.1, 0.01]
@@ -225,15 +224,16 @@ class TumorGrowthModels:
         params_logistic = self.fit_model_brute_force(self.logistic_wrapper, self.t_data, self.V_data, p0=initial_params, num_iterations=10000)
         params_von_bertalanffy = self.fit_model_brute_force(self.von_bertalanffy_wrapper, self.t_data, self.V_data, p0=initial_params_von_bertalanffy, num_iterations=10000)
         params_montroll = self.fit_model_brute_force(self.montroll_wrapper, self.t_data, self.V_data, p0=[0.01, 8, 0.1], num_iterations=10000)
-        params_allee = self.fit_model_brute_force(self.allee_wrapper, self.t_data, self.V_data, p0=[0.01, 0, 0.8], num_iterations=10000)
+        params_allee = self.fit_model_brute_force(self.allee_wrapper, self.t_data, self.V_data, p0=[0.01, 0, 0.1], num_iterations=10000)
+        
         # Simuleer data
-        dt = t_vooruit[1] - t_vooruit[0]
-        V_sim_gompertz = self.gompertz_Runga(t_vooruit, self.V_data[0], *params_gompertz, dt)
-        V_sim_logistic = self.logistic_Runga(t_vooruit, self.V_data[0], *params_logistic, dt)
-        V_sim_von_bertalanffy = self.von_bertalanffy_runga(t_vooruit, self.V_data[0], *params_von_bertalanffy, dt)
-        V_sim_mendelsohn = self.mendelsohn_Runga(t_vooruit, self.V_data[0], *params_mendelsohn, dt)
-        V_sim_montroll = self.montroll_Runga(t_vooruit, self.V_data[0], *params_montroll, dt)
-        V_sim_allee = self.allee_Runga(t_vooruit, self.V_data[0], *params_allee, dt)
+        dt = self.t_data[1] - self.t_data[0]
+        V_sim_gompertz = self.gompertz_Runga(self.t_data, self.V_data[0], *params_gompertz, dt)
+        V_sim_logistic = self.logistic_Runga(self.t_data, self.V_data[0], *params_logistic, dt)
+        V_sim_von_bertalanffy = self.von_bertalanffy_runga(self.t_data, self.V_data[0], *params_von_bertalanffy, dt)
+        V_sim_mendelsohn = self.mendelsohn_Runga(self.t_data, self.V_data[0], *params_mendelsohn, dt)
+        V_sim_montroll = self.montroll_Runga(self.t_data, self.V_data[0], *params_montroll, dt)
+        V_sim_allee = self.allee_Runga(self.t_data, self.V_data[0], *params_allee, dt)
         # Fit Montroll's model met brute force
         
 
@@ -241,12 +241,12 @@ class TumorGrowthModels:
         # Visualisatie
         plt.figure(figsize=(10, 6))
         plt.scatter(self.t_data, self.V_data, color="red", label="Data")
-        plt.plot(t_vooruit, V_sim_mendelsohn, label=f"Mendelsohn Model, params={params_mendelsohn}", color="orange")
-        plt.plot(t_vooruit, V_sim_gompertz, label=f"Gompertz Model, params={params_gompertz}", color="blue")
-        plt.plot(t_vooruit, V_sim_logistic, label=f"Logistic Model, params={params_logistic}", color="green")
-        plt.plot(t_vooruit, V_sim_von_bertalanffy, label=f"Von Bertalanffy Model, params={params_von_bertalanffy}", color="purple")
-        plt.plot(t_vooruit, V_sim_montroll, label=f"Montroll Model, params={params_montroll}", color="pink")
-        plt.plot(t_vooruit, V_sim_allee, label=f"Allee Effect Model, params={params_allee}", color="brown")
+        plt.plot(self.t_data, V_sim_mendelsohn, label=f"Mendelsohn Model, params={params_mendelsohn}", color="orange")
+        plt.plot(self.t_data, V_sim_gompertz, label=f"Gompertz Model, params={params_gompertz}", color="blue")
+        plt.plot(self.t_data, V_sim_logistic, label=f"Logistic Model, params={params_logistic}", color="green")
+        plt.plot(self.t_data, V_sim_von_bertalanffy, label=f"Von Bertalanffy Model, params={params_von_bertalanffy}", color="purple")
+        plt.plot(self.t_data, V_sim_montroll, label=f"Montroll Model, params={params_montroll}", color="pink")
+        plt.plot(self.t_data, V_sim_allee, label=f"Allee Effect Model, params={params_allee}", color="brown")
         plt.title("Tumorgroei Modellen vs. Data")
         plt.xlabel("Tijd (dagen)")
         plt.ylabel("Tumorvolume (mm³)")
@@ -255,35 +255,27 @@ class TumorGrowthModels:
         plt.show()
 
         # Bereken AIC en BIC
-        rss_gompertz = self.calculate_residuals(self.V_data,self.gompertz_wrapper(self.t_data, *params_gompertz, self.V_data))
-        rss_logistic = self.calculate_residuals(self.V_data, self.logistic_wrapper(self.t_data, *params_logistic,self.V_data))
-        rss_von_bertalanffy = self.calculate_residuals(self.V_data, self.von_bertalanffy_wrapper(self.t_data, *params_von_bertalanffy,self.V_data))
+        rss_gompertz = self.calculate_residuals(self.V_data, V_sim_gompertz)
+        rss_logistic = self.calculate_residuals(self.V_data, V_sim_logistic)
+        rss_von_bertalanffy = self.calculate_residuals(self.V_data, V_sim_von_bertalanffy)
+        rss_mendelsohn = self.calculate_residuals(self.V_data, V_sim_mendelsohn)
+        rss_montroll = self.calculate_residuals(self.V_data, V_sim_montroll)
+        rss_allee = self.calculate_residuals(self.V_data, V_sim_allee)
 
+        # AIC en BIC berekeningen
         n = len(self.V_data)
-        k_gompertz = len(params_gompertz)
-        k_logistic = len(params_logistic)
-        k_von_bertalanffy = len(params_von_bertalanffy)
-
-        aic_gompertz = self.calculate_aic(n, rss_gompertz, k_gompertz)
-        bic_gompertz = self.calculate_bic(n, rss_gompertz, k_gompertz)
-        aic_logistic = self.calculate_aic(n, rss_logistic, k_logistic)
-        bic_logistic = self.calculate_bic(n, rss_logistic, k_logistic)
-        aic_von_bertalanffy = self.calculate_aic(n, rss_von_bertalanffy, k_von_bertalanffy)
-        bic_von_bertalanffy = self.calculate_bic(n, rss_von_bertalanffy, k_von_bertalanffy)
-
-        rss_mendelsohn = self.calculate_residuals(self.V_data, self.mendelsohn_wrapper(self.t_data, *params_mendelsohn, self.V_data))
+        aic_gompertz = self.calculate_aic(n, rss_gompertz, len(params_gompertz))
+        bic_gompertz = self.calculate_bic(n, rss_gompertz, len(params_gompertz))
+        aic_logistic = self.calculate_aic(n, rss_logistic, len(params_logistic))
+        bic_logistic = self.calculate_bic(n, rss_logistic, len(params_logistic))
+        aic_von_bertalanffy = self.calculate_aic(n, rss_von_bertalanffy, len(params_von_bertalanffy))
+        bic_von_bertalanffy = self.calculate_bic(n, rss_von_bertalanffy, len(params_von_bertalanffy))
         aic_mendelsohn = self.calculate_aic(n, rss_mendelsohn, len(params_mendelsohn))
         bic_mendelsohn = self.calculate_bic(n, rss_mendelsohn, len(params_mendelsohn))
-
-        rss_montroll = self.calculate_residuals(self.V_data, self.montroll_wrapper(self.t_data, *params_montroll,self.V_data))
-        aic_montroll = self.calculate_aic(n,rss_montroll,len(params_montroll))
-        bic_montroll = self.calculate_bic(n,rss_montroll,len(params_montroll))
-
-        rss_allee = self.calculate_residuals(self.V_data, self.allee_wrapper(self.t_data, *params_montroll,self.V_data))
-        aic_allee = self.calculate_aic(n,rss_allee,len(params_allee))
-        bic_allee = self.calculate_bic(n,rss_allee,len(params_allee))
-
-
+        aic_montroll = self.calculate_aic(n, rss_montroll, len(params_montroll))
+        bic_montroll = self.calculate_bic(n, rss_montroll, len(params_montroll))
+        aic_allee = self.calculate_aic(n, rss_allee, len(params_allee))
+        bic_allee = self.calculate_bic(n, rss_allee, len(params_allee))
 
         import pandas as pd
 
