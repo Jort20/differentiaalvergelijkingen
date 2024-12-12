@@ -112,23 +112,79 @@ dV/dt = c * (V-Vmin) * (Vmax - V)
 
 Aangezien de modellen gebaseerd zijn op niet-lineaire differentiaalvergelijkingen, gebruiken we numerieke methoden om ze op te lossen:
 
-### Heun-methode
-Een verbeterde versie van de Euler-methode, die een correctiefactor toevoegt om nauwkeuriger te zijn:
 
-V_new = V + Δt * (f(t, V) + f(t + Δt, V_euler)) / 2
+### Runge-Kutta Methode (Vierde Orde)
 
-Hierbij wordt \( f(t, V) \) gegeven door het groeimodel.
+De **Runge-Kutta-methode** van de vierde orde is een veelgebruikte techniek voor numerieke integratie van gewone differentiaalvergelijkingen (ODE's). Deze methode wordt vaak toegepast wanneer een analytische oplossing moeilijk te verkrijgen is. De vierde-orde methode biedt een uitstekende balans tussen nauwkeurigheid en rekenefficiëntie.
 
-### Runge-Kutta-methode (vierde orde)
-Een populaire methode voor numerieke integratie:
+#### Algemene Formule
 
-V_new = V + (k1 + 2k2 + 2k3 + k4) / 6
+De algemene formule voor de vierde-orde Runge-Kutta-methode is:
+
+$$
+V_{\text{new}} = V + \frac{k_1 + 2k_2 + 2k_3 + k_4}{6}
+$$
 
 waarbij:
+- $(V_{\text{new}}\)$ de geschatte waarde is na één stap van de integratie.
+- $(V\)$ de huidige waarde van de functie is.
+- $(\Delta t\)$ de tijdstap is.
 
-k1 = Δt * f(t, V) k2 = Δt * f(t + Δt/2, V + k1/2) k3 = Δt * f(t + Δt/2, V + k2/2) k4 = Δt * f(t + Δt, V + k3)
+#### Berekening van de coëfficiënten
 
-Enzovoorts, met hogere orde correcties.
+De waarden $(k_1\)$, $(k_2\)$, $(k_3\)$, en $(k_4\)$ worden als volgt berekend:
+
+1. **Eerste coëfficiënt (k1):**
+$$
+k_1 = \Delta t \cdot f(t, V)
+$$
+   Dit is de snelheid van verandering van de functie op het begin van de tijdstap.
+
+2. **Tweede coëfficiënt (k2):**
+$$
+k_2 = \Delta t \cdot f\left(t + \frac{\Delta t}{2}, V + \frac{k_1}{2}\right)
+$$
+
+   Dit is de snelheid van verandering van de functie halverwege de tijdstap, gecorrigeerd door de helft van \(k_1\).
+
+3. **Derde coëfficiënt (k3):**
+$$
+k_3 = \Delta t \cdot f\left(t + \frac{\Delta t}{2}, V + \frac{k_2}{2}\right)
+$$
+
+   Dit is de snelheid van verandering op hetzelfde halverwege-tijdstip als \(k_2\), maar met een interim-waarde gecorrigeerd door $(k_2\)$.
+
+4. **Vierde coëfficiënt (k4):**
+$$
+k_4 = \Delta t \cdot f(t + \Delta t, V + k_3)
+$$
+
+   Dit is de snelheid van verandering aan het einde van de tijdstap, gecorrigeerd door $(k_3\)$.
+
+#### Toepassing
+
+Na het berekenen van de vier coëfficiënten $(k_1\)$, $(k_2\)$, $(k_3\)$, en $(k_4\)$, wordt de nieuwe waarde $(V_{\text{new}}\)$ van de functie berekend met de gewogen som van deze coëfficiënten:
+
+$$
+V_{\text{new}} = V + \frac{k_1 + 2k_2 + 2k_3 + k_4}{6}
+$$
+
+Deze gewogen gemiddelde aanpak zorgt ervoor dat de methode nauwkeuriger is dan eenvoudiger methoden zoals de **Euler-methode**.
+
+
+
+## Voorbeeld Code (Python)
+
+```python
+def runge_kutta_4(f, V, t, dt):
+    k1 = dt * f(t, V)
+    k2 = dt * f(t + dt / 2, V + k1 / 2)
+    k3 = dt * f(t + dt / 2, V + k2 / 2)
+    k4 = dt * f(t + dt, V + k3)
+    
+    V_new = V + (k1 + 2*k2 + 2*k3 + k4) / 6
+    return V_new
+```
 
 ---
 
