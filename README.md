@@ -1,6 +1,6 @@
 # Tumorgroei Modellen met Python
 
-Dit project implementeert en vergelijkt verschillende wiskundige modellen voor tumorgroei, inclusief het Gompertz-, Logistic- en Von Bertalanffy-model. De implementatie omvat methoden om deze modellen te simuleren, te fitten aan data en de resultaten te visualiseren. Daarnaast worden numerieke methoden zoals de Heun- en Runge-Kutta-methode gebruikt om de modellen op te lossen.
+Dit project implementeert en vergelijkt verschillende wiskundige modellen voor tumorgroei, inclusief het Gompertz-, Logistic-, Mendelsohn-, Montroll-, Von Bertalanffy- en Allee-effect-model. De implementatie omvat methoden om deze modellen te simuleren, te fitten aan data en de resultaten te visualiseren. Daarnaast worden numerieke methoden zoals de Heun- en Runge-Kutta-methode gebruikt om de modellen op te lossen.
 
 ---
 
@@ -25,11 +25,13 @@ Dit project implementeert en vergelijkt verschillende wiskundige modellen voor t
 
 De groei van tumoren is een complex proces dat vaak wordt gemodelleerd met behulp van differentiaalvergelijkingen. Deze modellen simuleren hoe een tumor in volume groeit over de tijd en helpen onderzoekers om groeiprofielen te begrijpen en behandelingsstrategieën te ontwikkelen. 
 
-De drie modellen in dit project hebben elk unieke eigenschappen die ze geschikt maken voor verschillende toepassingen:
+De zes modellen in dit project hebben elk unieke eigenschappen die ze geschikt maken voor verschillende toepassingen:
 - **Gompertz-model**: Wordt vaak gebruikt in tumorbiologie vanwege zijn flexibiliteit en realistische groei-limieten.
 - **Logistisch model**: Eenvoudig en effectief, vaak gebruikt voor populatiedynamica of groei met beperkende factoren.
 - **Von Bertalanffy-model**: Beschrijft zowel groei als afbraak, word gebruikt in biologie en fysiologie.
-
+- **Mendelsohn-model**: Beschrijft een ongelimiteerd groei van tumor, vaak gebruikt voor populatie groei of groei van tumors zonder limieten, biologisch onrealistisch. 
+- **Montroll-model**: Het model geeft een beter fit en predictie van het buigpunt, vaak gebruikt voor populatie groei en tumor groei.
+- **Allee-effect-model**: Het model neemt het negative en positive groei mee, vaak gebruikt voor ecologisch en biologische doeleinden.
 ---
 
 ## Modellen en Parameters
@@ -71,8 +73,39 @@ dV/dt = c * V^(2/3) - d * V
 - `d`: De afbraaksnelheid (dag⁻¹). Dit beschrijft hoe snel de tumor krimpt door interne processen.
 - `t`: Tijd (dagen).
 
+### Mendelsohn model
+
+Het Mendelsohn groei model:
+dV/dt = c * V^d
+
+- `V`: Het tumorvolume (mm³).
+- `c`: De groeifactor (dag⁻¹). Het bepaalt de waarde van het initiële groei.
+- `d`: De groeisnelheid van het tumorvolume. Dit beschrijft het snelheid hoe snel de tumor groeit.
+- `t`: Tijd (dagen).
+
+### Montroll model
+
+Het Montroll groei model:
+dV/dt = c * V *(Vmax^d - V^d)
+
+- `V`: Het tumorvolume (mm³)
+- `c`: De groeifactor (dag⁻¹). Het bepaalt de waarde van het initiële groei.
+- `Vmax`: Het maximumvolume dat het tumor kan bereiken vanwege fysieke of biologische beperkingen.
+- `d`: De groeisnelheid van het tumorvolume. Dit beschrijft hoe sterk het groei en afbraak is van het tumorvolume. 
+- `t`: Tijd (dagen).
 
 
+### Allee effect model
+
+Het Allee effect model
+dV/dt = c * (V-Vmin) * (Vmax - V)
+
+- `V`: Het tumorvolume (mm³)
+- `c`: De groeifactor (dag⁻¹). Het bepaalt de waarde van het initiële groei.
+- `Vmin`: Het minimumvolume dat het tumorvolume kan zijn. Dit beschrijft het threshold waarde van het groei.
+- `Vmax`: Het maximumvolume dat het tumor kan bereiken vanwege fysieke of biologische beperkingen.
+- `t`: Tijd (dagen).
+ 
 ---
 
 ## Numerieke Methoden
@@ -190,7 +223,7 @@ model.evaluate_models(t_vooruit)
 
 Na het uitvoeren van de bovenstaande code:
 
-Visualisatie: Er worden grafieken getoond van de tumorgroei volgens de drie modellen (Gompertz, Logistic, Von Bertalanffy) in vergelijking met de werkelijke gegevens.
+Visualisatie: Er worden grafieken getoond van de tumorgroei volgens de zes modellen (Gompertz, Logistic, Von Bertalanffy, Mendelsohn, Montroll en Allee-effect) in vergelijking met de werkelijke gegevens.
 
 Model Evaluatie: De AIC- en BIC-waarden worden berekend voor elk model en weergegeven in de console. Deze waarden helpen je bij het kiezen van het beste model.
    
@@ -219,5 +252,9 @@ No specific licensing applies
 3. Derek H. Ogle (2006). *Growth (von Bertalanffy) Notes*. [Link](https://derekogle.com/NCNRS349/modules/PREP/NOTES/Growth)
 4. *Runge-Kutta Method*. [link](https://www.sciencedirect.com/topics/mathematics/runge-kutta-method)
 5. *Heun's method*. [link](https://en.wikipedia.org/wiki/Heun%27s_method)
+6. *Mendelsohn*, [link](https://bmccancer.biomedcentral.com/articles/10.1186/s12885-016-2164-x)
+7. *Montroll* [link](https://www.mdpi.com/2227-7390/12/8/1195)
+8. *Allee effect* [link} (https://www.sciencedirect.com/science/article/abs/pii/S1476945X16300745)
+
 
 
