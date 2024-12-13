@@ -228,7 +228,7 @@ def runge_kutta_4(f, V, t, dt):
    ```
 2. Installeer de packages
    ```bash
-   pip install numpy scipy matplotlib
+   pip install numpy pandas matplotlib
    ```
 ---
 
@@ -345,8 +345,7 @@ Na het uitvoeren van de bovenstaande code:
 
 Visualisatie: Er worden grafieken getoond van de tumorgroei volgens de zes modellen (Gompertz, Logistic, Von Bertalanffy, Mendelsohn, Montroll en Allee-effect) in vergelijking met de werkelijke gegevens.
 
-Model Evaluatie: De AIC- en BIC-waarden worden berekend voor elk model en weergegeven in de console. Deze waarden helpen je bij het kiezen van het beste model.
-   
+Model Evaluatie: De AIC- en BIC-waarden en optimale parameters worden berekend voor elk model en weergegeven in de console. Deze waarden helpen je bij het kiezen van het beste model. Uitgebreidere uitleg over wat wat is te vinden in de jupiter notebook toelichting.ipynb
 
 ## Problemen
 
@@ -368,7 +367,7 @@ No specific licensing applies
 
 ### Referenties
 1. *Gompertz function*. [Link](https://www.tmlep.com/clinical-learning/2023-01-23-when-did-this-tumour-start-the-need-for-a-gompertzian-understanding-of-tumour-growth-kinetics)
-2. *Logistic regression*. [Link](https://en.wikipedia.org/wiki/Logistic_regression)
+2. *Logistic regression*. [Link](https://www.spiceworks.com/tech/artificial-intelligence/articles/what-is-logistic-regression/)
 3. Derek H. Ogle (2006). *Growth (von Bertalanffy) Notes*. [Link](https://derekogle.com/NCNRS349/modules/PREP/NOTES/Growth)
 4. *Runge-Kutta Method*. [link](https://www.sciencedirect.com/topics/mathematics/runge-kutta-method)
 5. *Heun's method*. [link](https://en.wikipedia.org/wiki/Heun%27s_method)
