@@ -43,7 +43,6 @@ Hieronder worden de modellen en hun parameters in detail beschreven:
 De differentiaalvergelijking voor het Gompertz-model is:
 dV/dt = c * V * ln(V_max / V)
 
-
 **Parameters**:
 - `V`: Het tumorvolume op een bepaald tijdstip `t` (mm³).
 - `c`: De groeisnelheidsparameter (dag⁻¹). Een hogere waarde geeft een snellere initiële groei aan.
@@ -97,7 +96,7 @@ dV/dt = c * V *(Vmax^d - V^d)
 
 ### Allee effect model
 
-Het Allee effect model
+Het Allee effect groei model:
 dV/dt = c * (V-Vmin) * (Vmax - V)
 
 - `V`: Het tumorvolume (mm³)
@@ -112,14 +111,13 @@ dV/dt = c * (V-Vmin) * (Vmax - V)
 
 Aangezien de modellen gebaseerd zijn op niet-lineaire differentiaalvergelijkingen, gebruiken we numerieke methoden om ze op te lossen:
 
-
 ### Runge-Kutta Methode (Vierde Orde)
 
 De **Runge-Kutta-methode** van de vierde orde is een veelgebruikte techniek voor numerieke integratie van gewone differentiaalvergelijkingen (ODE's). Deze methode wordt vaak toegepast wanneer een analytische oplossing moeilijk te verkrijgen is. De vierde-orde methode biedt een uitstekende balans tussen nauwkeurigheid en rekenefficiëntie.
 
 #### Algemene Formule
 
-De algemene formule voor de vierde-orde Runge-Kutta-methode is:
+Het algemene formule voor de vierde-orde Runge-Kutta-methode is:
 
 $$
 V_{\text{new}} = V + \frac{k_1 + 2k_2 + 2k_3 + k_4}{6}
@@ -212,10 +210,16 @@ def runge_kutta_4(f, V, t, dt):
 - `growth`: De groeifunctie die de groeisnelheid berekent.
 - `simulate`: Voert een simulatie uit van het model over een gegeven tijdsinterval met behulp van de Runge-Kutta methode.
 
-### model evaluatie
+### Genereren nepdataset
+#### Datahandeler
+- `generate_data`: Genereert een tijds data en volume data met behulp van random getallen.
+
+### Model evaluatie
 #### Evaluator:
 - `fit_and_evaluate`: Fitte een model aan de gegevens en evalueer de kwaliteit met behulp van AIC en BIC.
 - `compare_models`: Vergelijk meerdere groeimodellen op basis van AIC en BIC en retourneer een DataFrame met resultaten.
+
+
 
 
 ---
@@ -228,7 +232,7 @@ def runge_kutta_4(f, V, t, dt):
    ```
 2. Installeer de packages
    ```bash
-   pip install numpy pandas matplotlib
+   pip install numpy pandas matplotlib random math
    ```
 ---
 
@@ -245,8 +249,16 @@ from basemodel import DataHandler, Evaluator, LogisticModel, GompertzModel, VonB
 ### Stap 2: Genereer of definieer je eigen Data
 
 Je kunt de nepdatasets die door de module worden gegenereerd gebruiken, of je kunt je eigen tijd- en volumegegevens instellen.
+
 ```python
+
 # Voorbeeld van nepdataset genereren
+
+# Bij het genereren van t_data neemt hij random getalen van een lengte dat wordt meegegeven.
+t_data = [random() for _ in range(length)]
+
+# Bij het genereren van V_data neemt hij een exponentiele waarde -1 voor elke tijds punt in t_data.
+V_data = [exp(data_t) - 1.0 for data_t in t_data]
 
 # Of je kunt je eigen data instellen
 t_data = [
@@ -297,6 +309,8 @@ V_data = [
     5.9668, 6.6945, 6.6395, 6.8971, 7.2966, 7.2268, 6.8815, 8.0993, 7.2112,
     7.0694, 7.4971, 6.9974, 6.7219, 7.0523, 7.1095, 7.0694, 8.0562, 7.2268, 
 ]
+# Genereer data
+t_data, V_data = DataHandler.generate_data(length) # Geef lengte mee van de data, die je wilt genereren
 
 # Instantieer de evaluator
 evaluator = Evaluator(t_data, V_data)
@@ -345,7 +359,7 @@ Na het uitvoeren van de bovenstaande code:
 
 Visualisatie: Er worden grafieken getoond van de tumorgroei volgens de zes modellen (Gompertz, Logistic, Von Bertalanffy, Mendelsohn, Montroll en Allee-effect) in vergelijking met de werkelijke gegevens.
 
-Model Evaluatie: De AIC- en BIC-waarden en optimale parameters worden berekend voor elk model en weergegeven in de console. Deze waarden helpen je bij het kiezen van het beste model. Uitgebreidere uitleg over wat wat is te vinden in de jupiter notebook toelichting.ipynb
+Model Evaluatie: De AIC- en BIC-waarden en optimale parameters worden berekend voor elk model en weergegeven in de console. Deze waarden helpen je bij het kiezen van het beste model. Uitgebreidere uitleg over wat wat is te vinden in de Jupyter Notebook toelichting.ipynb
 
 ## Problemen
 
@@ -356,6 +370,7 @@ Bij problemen in de module kun je een mail sturen (zie de **Authors** sectie).
 
 Developed by:
 - Jort Gommers: [j.r.gommers@st.hanze.nl](mailto:j.r.gommers@st.hanze.nl)
+- Akastia Christo: [m.a.christo@st.hanze.nl](mailto:m.a.christo@st.hanze.nl)
 
 ## License
 No specific licensing applies 
@@ -373,7 +388,4 @@ No specific licensing applies
 5. *Heun's method*. [link](https://en.wikipedia.org/wiki/Heun%27s_method)
 6. *Mendelsohn*, [link](https://bmccancer.biomedcentral.com/articles/10.1186/s12885-016-2164-x)
 7. *Montroll* [link](https://www.mdpi.com/2227-7390/12/8/1195)
-8. *Allee effect* [link} (https://www.sciencedirect.com/science/article/abs/pii/S1476945X16300745)
-
-
-
+8. *Allee effect* [link] (https://www.sciencedirect.com/science/article/abs/pii/S1476945X16300745)
