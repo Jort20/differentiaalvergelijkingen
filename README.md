@@ -194,10 +194,29 @@ def runge_kutta_4(f, V, t, dt):
 
 ## Functies en Functionaliteit
 
-- **`generate_fake_data`**: Genereert gesimuleerde data voor tumorvolumes en tijd.
-- **`fit_model`**: Past een model aan op de data om de optimale parameters te vinden.
-- **`wrappers`: Wrapper-functies voor compatibiliteit met `de beste param methode`.
-- **Visualisatie**: Grafieken van modelvergelijkingen en data met Matplotlib.
+### Functies:
+- `runga_method`: Voert numerieke integratie uit voor een gegeven groeifunctie met behulp van de Runge-Kutta 4e orde methode.
+- `calculate_residuals`: Berekent de Residual Sum of Squares (RSS) tussen gemeten en gesimuleerde volumedata.
+- `calculate_aic`: Berekent de Akaike Information Criterion (AIC) voor modelselectie.
+- `calculate_bic`: Berekent de Bayesian Information Criterion (BIC) voor modelselectie.
+### Specifieke groeimodellen
+#### Elk van de volgende klassen representeert een specifiek groeimodel:
+- `LogisticModel`: Voor het logistische groeimodel, met simulatie en groeifunctie.
+- `GompertzModel`: Voor het Gompertz groeimodel, met simulatie en groeifunctie.
+- `VonBertalanffyModel`: Voor het Von Bertalanffy groeimodel, met simulatie en groeifunctie.
+- `MendelsohnModel`: Voor het Mendelsohn groeimodel, met simulatie en groeifunctie.
+- `MontrollModel`: Voor het Montroll groeimodel, met simulatie en groeifunctie.
+- `AlleeModel`: Voor het Allee groeimodel, met simulatie en groeifunctie.
+
+#### Elk specifiek model klasse bevat:
+- `growth`: De groeifunctie die de groeisnelheid berekent.
+- `simulate`: Voert een simulatie uit van het model over een gegeven tijdsinterval met behulp van de Runge-Kutta methode.
+
+### model evaluatie
+# Evaluator:
+- `fit_and_evaluate`: Fitte een model aan de gegevens en evalueer de kwaliteit met behulp van AIC en BIC.
+- `compare_models`: Vergelijk meerdere groeimodellen op basis van AIC en BIC en retourneer een DataFrame met resultaten.
+
 
 ---
 
