@@ -103,6 +103,14 @@ class LogisticModel(BaseModel):
     """
     Logistische groeimodel.
     """
+    def __str__(self):
+        """ String representatie """
+        return f"dV/dt = c * V * (V_max - V)"
+
+    def __repr__(self):
+        """ Technische representatie """
+        return f"LogisticModel(BaseModel)"
+
     @staticmethod
     def growth(t, V, c, V_max):
         """
@@ -140,7 +148,13 @@ class GompertzModel(BaseModel):
     """
     Gompertz groeimodel.
     """
+    def __str__(self):
+        """ String representatie """
+        return f"dV/dt = c * V * ln(V_max/V)"
 
+    def __repr__(self):
+        """ Technische representatie"""
+        return f"GompertzModel({BaseModel})"
     @staticmethod
     def growth(t, V, c, V_max):
         """
@@ -178,6 +192,12 @@ class VonBertalanffyModel(BaseModel):
     """
     Von Bertalanffy groeimodel.
     """
+    def __str__(self):
+        """ String representatie """
+        return f"dV/dt = c * V^(2/3) - d * V"
+    def __repr__(self):
+        """ Technische representatie"""
+        return f"VonBertalanffyModel(BaseModel)"
     @staticmethod
     def growth(t, V, c, d):
         """
@@ -215,6 +235,14 @@ class MendelsohnModel(BaseModel):
     """
     Mendelsohn groeimodel.
     """
+    def __str__(self):
+        """ String representatie """
+        return f"dV/dt = c * V^d"
+
+    def __repr__(self):
+        """ Technische representatie"""
+        return f"MendelsohnModel(BaseModel)"
+
     @staticmethod
     def growth(t, V, c, D):
         """
@@ -252,6 +280,14 @@ class MontrollModel(BaseModel):
     """
     Montroll groeimodel.
     """
+    def __str__(self):
+        """ String representation """
+        return f"dV/dt = c * V * (V_max^d - V^d)"
+
+    def __repr__(self):
+        """ Technical representation"""
+        return f"MontrollModel(BaseModel)"
+
     @staticmethod
     def growth(t, V, c, V_max, d):
         """
@@ -291,6 +327,14 @@ class AlleeModel(BaseModel):
     """
     Allee groeifunctie met minimum en maximum drempelwaarden.
     """
+    def __str__(self):
+        """ String representatie """
+        return f"dV/dt = c * (V - V_min) * (V_max - V)"
+
+    def __repr__(self):
+        """ Technische representatie"""
+        return f"AlleeEffectModel(BaseModel)"
+
     @staticmethod
     def growth(t, V, c, V_min, V_max):
         """
@@ -330,6 +374,10 @@ class AlleeModel(BaseModel):
 
 # Data generatie
 class DataHandler:
+    """
+    Class DataHandler
+    Genereert neppe data set, als het nodig is.
+    """
     def generate_data(self, length=45):
         """
         Genereert gesimuleerde tijd en volume nepdataset.
@@ -345,6 +393,10 @@ class DataHandler:
 
 # Model evaluatie
 class Evaluator:
+    """
+    Klasse Evaluator
+    Geeft methoden om het model te fitten en te evalueren.
+    """
     def __init__(self, t_data, V_data):
         self.t_data = t_data
         self.V_data = V_data
@@ -368,7 +420,7 @@ class Evaluator:
             instance = model_class(self.t_data, self.V_data)
             return instance.simulate(t, self.V_data[0], *params, t_forecast[1] - t_forecast[0])
 
-        best_params = p0
+        best_params = p0 # initiele parameters
         best_cost = np.sum((model(self.t_data, *best_params) - self.V_data) ** 2)
 
         # Optimalisatie van parameters door iteratief te zoeken naar lagere afwijkingen
@@ -404,6 +456,7 @@ class Evaluator:
             rss = BaseModel.calculate_residuals(self.V_data, V_sim[:len(self.t_data)])
             aic = BaseModel.calculate_aic(len(self.V_data), rss, len(params))
             bic = BaseModel.calculate_bic(len(self.V_data), rss, len(params))
+
             results[model_name] = {
                 'params': params,
                 'rss': rss,
@@ -412,5 +465,8 @@ class Evaluator:
                 'V_sim': V_sim
             }
         return results
+
+
+
 
 
