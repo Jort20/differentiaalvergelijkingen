@@ -194,10 +194,29 @@ def runge_kutta_4(f, V, t, dt):
 
 ## Functies en Functionaliteit
 
-- **`generate_fake_data`**: Genereert gesimuleerde data voor tumorvolumes en tijd.
-- **`fit_model`**: Past een model aan op de data om de optimale parameters te vinden.
-- **`wrappers`: Wrapper-functies voor compatibiliteit met `de beste param methode`.
-- **Visualisatie**: Grafieken van modelvergelijkingen en data met Matplotlib.
+### Functies:
+- `runga_method`: Voert numerieke integratie uit voor een gegeven groeifunctie met behulp van de Runge-Kutta 4e orde methode.
+- `calculate_residuals`: Berekent de Residual Sum of Squares (RSS) tussen gemeten en gesimuleerde volumedata.
+- `calculate_aic`: Berekent de Akaike Information Criterion (AIC) voor modelselectie.
+- `calculate_bic`: Berekent de Bayesian Information Criterion (BIC) voor modelselectie.
+### Specifieke groeimodellen
+#### Elk van de volgende klassen representeert een specifiek groeimodel:
+- `LogisticModel`: Voor het logistische groeimodel, met simulatie en groeifunctie.
+- `GompertzModel`: Voor het Gompertz groeimodel, met simulatie en groeifunctie.
+- `VonBertalanffyModel`: Voor het Von Bertalanffy groeimodel, met simulatie en groeifunctie.
+- `MendelsohnModel`: Voor het Mendelsohn groeimodel, met simulatie en groeifunctie.
+- `MontrollModel`: Voor het Montroll groeimodel, met simulatie en groeifunctie.
+- `AlleeModel`: Voor het Allee groeimodel, met simulatie en groeifunctie.
+
+#### Elk specifiek model klasse bevat:
+- `growth`: De groeifunctie die de groeisnelheid berekent.
+- `simulate`: Voert een simulatie uit van het model over een gegeven tijdsinterval met behulp van de Runge-Kutta methode.
+
+### model evaluatie
+#### Evaluator:
+- `fit_and_evaluate`: Fitte een model aan de gegevens en evalueer de kwaliteit met behulp van AIC en BIC.
+- `compare_models`: Vergelijk meerdere groeimodellen op basis van AIC en BIC en retourneer een DataFrame met resultaten.
+
 
 ---
 
@@ -209,7 +228,7 @@ def runge_kutta_4(f, V, t, dt):
    ```
 2. Installeer de packages
    ```bash
-   pip install numpy scipy matplotlib
+   pip install numpy pandas matplotlib
    ```
 ---
 
@@ -220,7 +239,7 @@ def runge_kutta_4(f, V, t, dt):
 De module moet geïmporteerd worden vanuit de Python-bestand waarin de class is opgeslagen (test.py in dit geval).
 
 ```python
-from test import TumorGrowthModels
+from basemodel import DataHandler, Evaluator, LogisticModel, GompertzModel, VonBertalanffyModel, MendelsohnModel, MontrollModel, AlleeModel
 ```
 
 ### Stap 2: Genereer of definieer je eigen Data
@@ -228,65 +247,105 @@ from test import TumorGrowthModels
 Je kunt de nepdatasets die door de module worden gegenereerd gebruiken, of je kunt je eigen tijd- en volumegegevens instellen.
 ```python
 # Voorbeeld van nepdataset genereren
-t_data, V_data = TumorGrowthModels.generate_fake_data()
 
 # Of je kunt je eigen data instellen
-t_data = np.array([0, 10, 20, 30, 40, 50, 60, 70, 80, 90, 100])
-V_data = np.array([250, 300, 450, 600, 750, 1000, 1300, 1700, 2200, 2700, 3200])
+t_data = [
+     3.46,  4.58,  5.67,  6.64,  7.63,  8.41,  9.32, 10.27, 11.19,
+    12.39, 13.42, 15.19, 16.24, 17.23, 18.18, 19.29, 21.23, 21.99,
+    24.33, 25.58, 26.43, 27.44, 28.43, 30.49, 31.34, 32.34, 33.00,
+    35.20, 36.34, 37.29, 38.50, 39.67, 41.37, 42.58, 45.39, 46.38,
+    48.29, 49.24, 50.19, 51.14, 52.10, 54.00, 56.33, 57.33, 59.38,
+]
+V_data = [
+    0.0158, 0.0264, 0.0326, 0.0445, 0.0646, 0.0933, 0.1454, 0.2183, 0.2842,
+    0.4977, 0.6033, 0.8441, 1.2163, 1.4470, 2.3298, 2.5342, 3.0064, 3.4044,
+    3.2046, 4.5241, 4.3459, 5.1374, 5.5376, 4.8946, 5.0660, 6.1494, 6.8548,
+    5.9668, 6.6945, 6.6395, 6.8971, 7.2966, 7.2268, 6.8815, 8.0993, 7.2112,
+    7.0694, 7.4971, 6.9974, 6.7219, 7.0523, 7.1095, 7.0694, 8.0562, 7.2268, 
+]
 ```
 
-### Stap 3: Maak een Model aan
-
-Maak een object van de TumorGrowthModels class, geef de tijd- en volumegegevens door aan de constructor.
-
-```python
-model = TumorGrowthModels(t_data, V_data)
-```
-### Stap 4: Stel de Tijdspanne in voor Simulatie (Optioneel)
+### Stap 3: Stel de Tijdspanne in voor Simulatie (Optioneel)
 
 Je kunt de tijdspanne voor de simulatie aanpassen via de t_vooruit parameter. Als deze parameter niet wordt opgegeven, wordt de standaardwaarde van np.linspace(0, 120, 100) gebruikt, wat betekent dat de simulatie loopt van 0 tot 120 dagen met 100 punten.
 
 ```python
 
-# Stel een eigen tijdspanne in
+# Stel een eigen tijdspanne in voor betere resultaten
 t_vooruit = np.linspace(0, 150, 150)  # Van 0 tot 150 dagen met 150 punten
 ```
-### Stap 5: Voer Model Evaluatie en Visualisatie uit
-
-Roep de evaluate_models methode aan om de modellen te fitten, de simulaties uit te voeren, de resultaten te visualiseren en de AIC/BIC-waarden te berekenen.
+### Stap 4: Voer Model Evaluatie en Visualisatie uit
 
 ```python
-# Voer model evaluatie uit en visualiseer de resultaten
-model.evaluate_models(t_vooruit)
-```
-### Volledige Voorbeeld
-
-from test import TumorGrowthModels
 import numpy as np
+import pandas as pd
+import matplotlib.pyplot as plt
+from test import DataHandler, Evaluator, LogisticModel, GompertzModel, VonBertalanffyModel, MendelsohnModel, MontrollModel, AlleeModel
 
-```python
-# Genereer of stel je eigen tijd- en volumegegevens in
-t_data = np.array([0, 10, 20, 30, 40, 50, 60, 70, 80, 90, 100])
-V_data = np.array([250, 300, 450, 600, 750, 1000, 1300, 1700, 2200, 2700, 3200])
+# Voeg hier je eigen data toe
+t_data = [
+     3.46,  4.58,  5.67,  6.64,  7.63,  8.41,  9.32, 10.27, 11.19,
+    12.39, 13.42, 15.19, 16.24, 17.23, 18.18, 19.29, 21.23, 21.99,
+    24.33, 25.58, 26.43, 27.44, 28.43, 30.49, 31.34, 32.34, 33.00,
+    35.20, 36.34, 37.29, 38.50, 39.67, 41.37, 42.58, 45.39, 46.38,
+    48.29, 49.24, 50.19, 51.14, 52.10, 54.00, 56.33, 57.33, 59.38,
+]
+V_data = [
+    0.0158, 0.0264, 0.0326, 0.0445, 0.0646, 0.0933, 0.1454, 0.2183, 0.2842,
+    0.4977, 0.6033, 0.8441, 1.2163, 1.4470, 2.3298, 2.5342, 3.0064, 3.4044,
+    3.2046, 4.5241, 4.3459, 5.1374, 5.5376, 4.8946, 5.0660, 6.1494, 6.8548,
+    5.9668, 6.6945, 6.6395, 6.8971, 7.2966, 7.2268, 6.8815, 8.0993, 7.2112,
+    7.0694, 7.4971, 6.9974, 6.7219, 7.0523, 7.1095, 7.0694, 8.0562, 7.2268, 
+]
 
-# Maak een model aan met je eigen data
-model = TumorGrowthModels(t_data, V_data)
+# Instantieer de evaluator
+evaluator = Evaluator(t_data, V_data)
 
-# Stel een eigen tijdspanne in voor de simulatie
-t_vooruit = np.linspace(0, 150, 150)  # Van 0 tot 150 dagen met 150 punten
+# Definieer de modellen en beginwaarden voor parameters
+t_forecast = np.linspace(0, 60, 45)
+models = {
+    'Logistic': (LogisticModel, [0.01, 7]),
+    'Gompertz': (GompertzModel, [0.11, 7.5]),
+    'Von Bertalanffy': (VonBertalanffyModel, [0.5, 0.2]),
+    'Mendelsohn': (MendelsohnModel, [0.01, 0.1]),
+    'Montroll': (MontrollModel, [0.01, 8, 0.1]),
+    'Allee': (AlleeModel, [0.05, 0, 7.5])
+}
 
-# Voer model evaluatie uit en visualiseer de resultaten
-model.evaluate_models(t_vooruit)
+# Modelvergelijking
+results = evaluator.compare_models(models, t_forecast)
+
+# Visualiseer de resultaten
+plt.figure(figsize=(10, 6))
+plt.scatter(t_data, V_data, color="red", label="Data")
+
+for model_name, result in results.items():
+    params = result['params']  # Zorg dat 'params' onderdeel is van result
+    param_str = ", ".join([f"{p:.4f}" for p in params])  # Formatteer de parameters
+    plt.plot(t_forecast, result['V_sim'], label=f"{model_name} (params: [{param_str}])")
+
+plt.title("Tumorgroei Modellen vs. Data")
+plt.xlabel("Tijd (dagen)")
+plt.ylabel("Tumorvolume (mm³)")
+plt.legend()
+plt.grid(True)
+plt.show()
+
+# Toon de statistische vergelijking
+df = pd.DataFrame.from_dict(results, orient='index')
+df = df[['aic', 'bic', 'params']].sort_values(by='aic')  # Voeg 'params' toe
+print(df)
+
 ```
-
+###
+Voor een uitgebreidere uitleg zie toelichting.ipynb
 ## Resultaten
 
 Na het uitvoeren van de bovenstaande code:
 
 Visualisatie: Er worden grafieken getoond van de tumorgroei volgens de zes modellen (Gompertz, Logistic, Von Bertalanffy, Mendelsohn, Montroll en Allee-effect) in vergelijking met de werkelijke gegevens.
 
-Model Evaluatie: De AIC- en BIC-waarden worden berekend voor elk model en weergegeven in de console. Deze waarden helpen je bij het kiezen van het beste model.
-   
+Model Evaluatie: De AIC- en BIC-waarden en optimale parameters worden berekend voor elk model en weergegeven in de console. Deze waarden helpen je bij het kiezen van het beste model. Uitgebreidere uitleg over wat wat is te vinden in de jupiter notebook toelichting.ipynb
 
 ## Problemen
 
@@ -308,7 +367,7 @@ No specific licensing applies
 
 ### Referenties
 1. *Gompertz function*. [Link](https://www.tmlep.com/clinical-learning/2023-01-23-when-did-this-tumour-start-the-need-for-a-gompertzian-understanding-of-tumour-growth-kinetics)
-2. *Logistic regression*. [Link](https://en.wikipedia.org/wiki/Logistic_regression)
+2. *Logistic regression*. [Link](https://www.spiceworks.com/tech/artificial-intelligence/articles/what-is-logistic-regression/)
 3. Derek H. Ogle (2006). *Growth (von Bertalanffy) Notes*. [Link](https://derekogle.com/NCNRS349/modules/PREP/NOTES/Growth)
 4. *Runge-Kutta Method*. [link](https://www.sciencedirect.com/topics/mathematics/runge-kutta-method)
 5. *Heun's method*. [link](https://en.wikipedia.org/wiki/Heun%27s_method)
