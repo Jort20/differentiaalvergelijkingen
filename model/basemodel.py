@@ -424,40 +424,4 @@ class Evaluator:
             }
         return results
 
-# Voorbeeldgebruik
-# Genereer gesimuleerde data
-t_data, V_data = DataHandler.generate_fake_data()
-evaluator = Evaluator(t_data, V_data)
-t_forecast = np.linspace(0, 120, 100)  # Tijdreeks voor voorspelling
 
-# Definieer modellen met startparameters
-models = {
-    'Logistic': (LogisticModel, [0.01, 7]),
-    'Gompertz': (GompertzModel, [0.11, 7.7]),
-    'Von Bertalanffy': (VonBertalanffyModel, [0.5, 0.2]),
-    'Mendelsohn': (MendelsohnModel, [0.01, 0.1]),
-    'Montroll': (MontrollModel, [0.01, 8, 0.1]),
-    'Allee': (AlleeModel, [0.05, 0, 7.5])
-}
-
-# Vergelijk modellen
-results = evaluator.compare_models(models, t_forecast)
-
-# Visualisatie van resultaten
-plt.figure(figsize=(10, 6))
-plt.scatter(t_data, V_data, color="red", label="Data")
-
-for model_name, result in results.items():
-    plt.plot(t_forecast, result['V_sim'], label=f"{model_name} (AIC: {result['aic']:.2f})")
-
-plt.title("Tumorgroei Modellen vs. Data")
-plt.xlabel("Tijd (dagen)")
-plt.ylabel("Tumorvolume (mm³)")
-plt.legend()
-plt.grid(True)
-plt.show()
-
-# Toon resultaten als tabel
-df = pd.DataFrame.from_dict(results, orient='index')
-df = df[['aic', 'bic']].sort_values(by='aic')
-print(df)
