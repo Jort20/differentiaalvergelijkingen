@@ -213,7 +213,7 @@ def runge_kutta_4(f, V, t, dt):
 - `simulate`: Voert een simulatie uit van het model over een gegeven tijdsinterval met behulp van de Runge-Kutta methode.
 
 ### model evaluatie
-# Evaluator:
+#### Evaluator:
 - `fit_and_evaluate`: Fitte een model aan de gegevens en evalueer de kwaliteit met behulp van AIC en BIC.
 - `compare_models`: Vergelijk meerdere groeimodellen op basis van AIC en BIC en retourneer een DataFrame met resultaten.
 
