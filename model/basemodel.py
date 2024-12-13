@@ -154,7 +154,7 @@ class GompertzModel(BaseModel):
 
     def __repr__(self):
         """ Technische representatie"""
-        return f"GompertzModel({BaseModel})"
+        return f"GompertzModel(BaseModel)"
     @staticmethod
     def growth(t, V, c, V_max):
         """
@@ -456,13 +456,16 @@ class Evaluator:
             rss = BaseModel.calculate_residuals(self.V_data, V_sim[:len(self.t_data)])
             aic = BaseModel.calculate_aic(len(self.V_data), rss, len(params))
             bic = BaseModel.calculate_bic(len(self.V_data), rss, len(params))
-
+            model_instance = model_class(self.t_data, self.V_data)
             results[model_name] = {
+                'Formule': str(model_instance),
+                'Model': repr(model_instance),
                 'params': params,
                 'rss': rss,
-                'aic': aic,
-                'bic': bic,
-                'V_sim': V_sim
+                'AIC': aic,
+                'BIC': bic,
+                'V_sim': V_sim,
+
             }
         return results
 
