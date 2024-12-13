@@ -347,7 +347,7 @@ plt.show()
 
 # Toon de statistische vergelijking
 df = pd.DataFrame.from_dict(results, orient='index')
-df = df[['aic', 'bic', 'params']].sort_values(by='aic')  # Voeg 'params' toe
+df = df[['AIC', 'BIC', 'params']].sort_values(by='AIC')  # Voeg 'params' toe
 print(df)
 
 ```
@@ -359,7 +359,7 @@ Na het uitvoeren van de bovenstaande code:
 
 Visualisatie: Er worden grafieken getoond van de tumorgroei volgens de zes modellen (Gompertz, Logistic, Von Bertalanffy, Mendelsohn, Montroll en Allee-effect) in vergelijking met de werkelijke gegevens.
 
-Model Evaluatie: De AIC- en BIC-waarden en optimale parameters worden berekend voor elk model en weergegeven in de console. Deze waarden helpen je bij het kiezen van het beste model. Uitgebreidere uitleg over wat wat is te vinden in de Jupyter Notebook toelichting.ipynb
+Model Evaluatie: De AIC- en BIC-waarden en optimale parameters worden berekend voor elk model en weergegeven in de console. Deze waarden helpen je bij het kiezen van het beste model. Uitgebreidere uitleg over wat wat is te vinden in de Jupyter Notebook toelichting.ipynb en laat zien hoe het module wordt toegepast p een realistische dataset.
 
 ## Problemen
 
@@ -389,3 +389,4 @@ No specific licensing applies
 6. *Mendelsohn*, [link](https://bmccancer.biomedcentral.com/articles/10.1186/s12885-016-2164-x)
 7. *Montroll* [link](https://www.mdpi.com/2227-7390/12/8/1195)
 8. *Allee effect* [link] (https://www.sciencedirect.com/science/article/abs/pii/S1476945X16300745)
+9. *Realistische data* [link] (https://journals.plos.org/ploscompbiol/article?id=10.1371%2Fjournal.pcbi.1007178#sec002)
